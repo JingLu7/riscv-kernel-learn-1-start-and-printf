@@ -1,0 +1,29 @@
+CC = riscv64-unknown-elf-gcc
+LD = riscv64-unknown-elf-ld
+OBJCOPY = riscv64-unknown-elf-objcopy
+
+CFLAGS = -ffreestanding -nostdlib -fno-stack-protector -mcmodel=medany
+
+OBJS = entry.o main.o uart.o
+
+all: kernel.elf
+
+kernel.elf: $(OBJS)
+		$(LD) -T linker.ld $(OBJS) -o kernel.elf
+
+entry.o: entry.S
+		$(CC) $(CFLAGS) -c entry.S -o entry.o
+
+main.o: main.c
+		$(CC) $(CFLAGS) -c main.c -o main.o
+
+uart.o: uart.c
+		$(CC) $(CFLAGS) -c uart.c -o uart.o
+
+clean:
+		rm -f *.o kernel.elf
+
+qemu: kernel.elf
+		qemu-system-riscv64 -machine virt -bios none -kernel kernel.elf -nographic
+
+
