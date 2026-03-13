@@ -68,7 +68,7 @@ We check this bit using a bitwise AND operation:
 
 If the bit is set, the UART is ready to send data.
 
-#5 Makefile
+# 5 Makefile
 
 The Makefile is relatively simple.
 
